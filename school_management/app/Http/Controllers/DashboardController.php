@@ -20,11 +20,16 @@ class DashboardController extends Controller
     $presentAttendance = Attendance::where('status', 'Present')->count();
     $attendancePercentage = $totalAttendance > 0 ? round(($presentAttendance / $totalAttendance) * 100) : 0;
 
+    $recentStudents = Student::latest()->take(5)->get();
+    $recentAttendances = Attendance::with(['student', 'subject'])->latest()->take(6)->get();
+
     return view('dashboard', compact(
         'studentsCount',
         'teachersCount',
         'subjectsCount',
-        'attendancePercentage'
+        'attendancePercentage',
+        'recentStudents',
+        'recentAttendances'
     ));
 }
 
